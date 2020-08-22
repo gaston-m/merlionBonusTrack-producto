@@ -310,3 +310,60 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+.max-margin {
+  margin-top: 2000px !important;
+}
+
+.card-item {
+  padding: 0.3rem;
+  box-sizing: border-box;
+  background-color: #2a6a9e !important;
+}
+
+.grid-container {
+  margin: 5rem 0;
+}
+
+.subtitle {
+  margin: 0 0 2rem 0 !important;
+}
+
+.content {
+  padding: 0.4rem !important;
+}
+
+.ligth {
+  background-color: rgba(12, 11, 11, 0.774);
+  color: rgb(236, 235, 235);
+  border-radius: 3%;
+}
+
+.subtitle-card {
+  text-align: center;
+  border-bottom: 2px solid rgb(17, 16, 16);
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.quantity-prod {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-control-dialog {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin: 1rem 0 !important;
+}
+
+.dialog {
+  width: 400px;
+  height: 300px;
+}
