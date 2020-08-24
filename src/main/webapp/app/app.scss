@@ -318,7 +318,8 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 .card-item {
   padding: 0.3rem;
   box-sizing: border-box;
-  background-color: #2a6a9e !important;
+  background-color: #f1f1f1 !important;
+  box-shadow: 0 -3em 3em rgba(0, 0, 0, 0.1), 0.3em 0.3em 1em rgba(0, 0, 0, 0.3) !important;
 }
 
 .grid-container {
@@ -334,19 +335,19 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 }
 
 .ligth {
-  background-color: rgba(12, 11, 11, 0.774);
+  background-color: rgba(27, 83, 136, 0.973);
   color: rgb(236, 235, 235);
   border-radius: 3%;
 }
 
 .subtitle-card {
   text-align: center;
-  border-bottom: 2px solid rgb(17, 16, 16);
   font-weight: 500 !important;
   margin-bottom: 0.5rem !important;
 }
 
 .quantity-prod {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -366,4 +367,65 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 .dialog {
   width: 400px;
   height: 300px;
+}
+
+.bucket-number {
+  font-size: 1.5rem !important;
+}
+
+.list-quantities {
+  font-weight: 500;
+  padding: 0;
+}
+
+.subtitle-list {
+  border-bottom: 2px solid rgb(0, 0, 0);
+  margin-bottom: 0.5rem;
+  padding: 3px;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.total-list {
+  background-color: rgb(54, 112, 189);
+  color: rgb(255, 255, 255);
+  border-radius: 3px;
+  margin-top: 10px;
+  padding: 3px;
+}
+
+.btn-link-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-link {
+  width: 49%;
+  color: rgb(209, 209, 209);
+}
+
+.btn-link:hover {
+  color: rgb(255, 255, 255);
+}
+
+.btn-send {
+  font-family: Roboto;
+  text-transform: capitalize !important;
+  background-color: rgb(4, 143, 66) !important;
+  color: rgb(209, 209, 209) !important;
+
+  &:hover {
+    color: white !important;
+    background-color: rgb(3, 128, 59) !important;
+    text-decoration: underline !important;
+  }
+}
+
+.alert-submit {
+  position: fixed !important;
+  z-index: 99999999 !important;
+  margin: -2rem 40% 0 32% !important;
+  width: 30%;
+  background-color: rgb(12, 65, 16) !important;
 }
