@@ -37,20 +37,16 @@ import Axios from 'axios';
 import { SUCCESS } from 'app/shared/reducers/action-type.util';
 
 
-const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }) => {
+const BucketCard = ({ bucket, match, getEntities, alert, setAlert }) => {
 
-
-
-
-    const [ expanded, setExpanded ] = useState(false)
     const [ open, setOpen ] = useState(false)
 
     // Send Products
-    // const [ submitSuccess, setSubmitSuccess ] = useState({ state: false, message: ''})
 
     const [ selectedBucket, setSelectedBucket ] = useState('')
     const [ quantity, setQuantity ] = useState('')
     const [ selectedState, setSelectedState ] = useState('')
+    const [ receivedState, setReceivedState ] = useState('')
 
 
     // Event handlers
@@ -66,102 +62,76 @@ const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }
         setOpen(false);
       };
 
-
-    const _handleChangeState = e => {
-      setSelectedState(e.target.value)
-     // console.log(e.target.value)
-    }
-
-    const _handleChangeBucket = e => {
-      setSelectedBucket(e.target.value)
-      // console.log(e.target.value)
-
+    const _handleChangeState = ( e, type) => {
+      if(type === 'send')
+        setSelectedState(e.target.value)
+      else 
+        setReceivedState(e.target.value)  
     }
 
     const _handleQuantity = e => {
       setQuantity(e.target.value)
-     // console.log(e.target.value)
-
     }
 
-    const _handleSubmit = async () => {
-    // _handleClose()
-    //    console.log('CurrenState', selectedBucket, selectedState, quantity)
+    const _handleSubmit = async () => {  
+          if(selectedState === '' || receivedState === '' || quantity === '') {
+            setAlert({
+              state: 'error',
+              status: true,
+              message: 'Todos los campos son requeridos'
+            })
+            return
+          }
 
-        if(selectedState === '' || selectedBucket === '' || quantity === '') {
-          setAlert({
-            state: 'error',
-            status: true,
-            message: 'Todos los campos son requeridos'
-          })
-          return
-        }
+          if(selectedState === receivedState) {
+            setAlert({
+              state: 'error',
+              status: true,
+              message: 'No puedes enviar al mismo bucket'
+            })
+            return
+          }
 
-        if(quantity <= bucket[selectedState]) {
-          const buck = bucketsList.find(b => b.id === selectedBucket)
-          if(buck && buck.product && bucket.product && buck.product.name && buck.product.name === bucket.product.name ) {
-            try {
-              const newQuantityBuk = Number(quantity) + Number(buck[selectedState])
-              const newBuck = {
-                ...buck,
-                [selectedState]: newQuantityBuk
-              }
   
-              const response = await axios.put('/api/product-buckets', newBuck)  
-  
-              if(response.status === 200) {
-                const newQuantityBuket = Number(bucket[selectedState]) - Number(quantity) 
-                const newBucket = {
+          if(quantity <= bucket[selectedState]) {
+              try {
+                const newQuantitySend = Number(bucket[selectedState]) - Number(quantity)
+                const newQuantityRec = Number(quantity) + Number(bucket[receivedState]) 
+                const newQuantities = {
                   ...bucket,
-                  [selectedState]: newQuantityBuket
+                  [selectedState]: newQuantitySend,
+                  [receivedState]: newQuantityRec
                 }
-  
-                const res = await axios.put('/api/product-buckets', newBucket)
-
-                if(res.status === 200) {
-                  setAlert({
-                    state: 'success',
-                    status: true,
-                    message: 'Envio realizado exitosamente!'
-                  })
-
-                 await getEntities()
-                _handleClose()
-                }
-
-              }
-            } catch (error) {
-              // console.log(error)
-            }
-
-          }  else {
-              if(buck) {
-                setAlert({
-                  state: 'error',
-                  status: true,
-                  message: 'El bucket posee otro producto o no tiene producto'
-                })
-                
-              }
-            }
-        }
-        else {
-          setAlert({
-            state: 'error',
-            status: true,
-            message: 'La cantidad que quiere enviar es mayor a la que posee el bucket'
-          })
-          return
-        }
-    }
-
-
-    // Effects
-
     
-    useEffect(()=>{
-      // console.log('ALERT', alert)
-   }, [ alert ])
+                const response = await axios.put('/api/product-buckets', newQuantities)  
+    
+                if(response.status === 200) {
+                    setAlert({
+                      state: 'success',
+                      status: true,
+                      message: 'Envio realizado exitosamente!'
+                    })
+  
+                   await getEntities()
+                  _handleClose()
+                  }
+  
+              
+              } catch (error) {
+                // console.log(error)
+              }
+  
+          } else {
+              setAlert({
+                state: 'error',
+                status: true,
+                message: 'La cantidad que quiere enviar es mayor a la que posee el bucket'
+              })
+              return
+          }
+    }
+  
+    // Effects
 
    useEffect(()=>{
        if(alert.state) {
@@ -176,24 +146,22 @@ const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }
 
     return ( 
 
-        <Grid item xs={6} sm={3}>  {/*  ver tomorrow*/}
+        <Grid item xs={12} sm={4}>  {/*  ver tomorrow*/}
             <Card className='card-item' >
                 <CardContent className='content ligth'>
-                 <Typography component='h4' variant='h6' >
-                    Nro de Bucket: # <span className='bucket-number'>{ bucket.id }</span>
-                 </Typography>
-                 <Typography component='h4' variant='h6' >
-                    Producto: <span>{ bucket.product ? bucket.product.name : 'No tiene Producto' }</span> 
+
+                 <Typography className='subtitle-card-ligth' component='h4' variant='h6' > 
+                    <span>
+                     Producto:
+                      {`  ${bucket.product ? bucket.product.name : 'No tiene Producto'}`}
+                    </span>  
                  </Typography>   
                 </CardContent>
                 <CardContent className=''>
-                <Typography component='h5' variant='h4' className='subtitle-card'>
-                   STOCK
-                 </Typography>
                  <ul className='list-quantities'>
                  <li  className='quantity-prod subtitle-list' >
                     <section className=''>
-                      Estado
+                      Buckets
                     </section>
                     <section>
                       Cantidad
@@ -237,7 +205,7 @@ const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }
                 <CardContent>
                 <div>
                   <Button onClick={ _handleClickOpen }  fullWidth className='btn-send' >
-                    Enviar Productos a otro Bucket &nbsp;
+                    Mover Productos entre Buckets &nbsp;
                     <FontAwesomeIcon icon='angle-double-right' style={{fontSize: '1.2rem'}} />
                   </Button>
                   <div className='btn-link-container'>
@@ -259,12 +227,12 @@ const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }
                         <DialogContent className='dialog'>
                           <form className='form-container'>
                               <FormControl className='form-control-dialog'>
-                                  <InputLabel id='label-state'>Estado</InputLabel>
+                                  <InputLabel id='label-state'>Bucket del que sacas</InputLabel>
                                   <Select
                                       labelId='label-state'
                                       id='state'
                                       value={selectedState}
-                                      onChange={ _handleChangeState }
+                                      onChange={ (e)=>{_handleChangeState(e, 'send') }}
                                       input={<Input />} >
                                       <MenuItem value=''>
                                           <em>Elije el estado de los productos que quieres enviar</em>
@@ -291,20 +259,25 @@ const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }
                                   shrink: true }} />
                               </FormControl>
                               <FormControl className='form-control-dialog'>
-                                  <InputLabel id='label-bucket'>Bucket al que envía</InputLabel>
+                                  <InputLabel id='label-state'>Bucket que recibe</InputLabel>
                                   <Select
-                                      labelId='label-bucket'
-                                      id='bucket'
-                                      value={selectedBucket}
-                                      onChange={ _handleChangeBucket }
+                                      labelId='label-state'
+                                      id='state'
+                                      value={receivedState}
+                                      onChange={ (e)=>{_handleChangeState(e, 'receive') } }
                                       input={<Input />} >
-                                        {
-                                            bucketsList.map(buck => (
-                                              <MenuItem key={buck.id} value={buck.id}>
-                                                  { buck.id }
-                                              </MenuItem>
-                                            ))
-                                        }
+                                      <MenuItem value=''>
+                                          <em>Elije el estado de los productos que quieres enviar</em>
+                                      </MenuItem>
+                                      <MenuItem value={'availableToSellQuantity'}>
+                                          Disp. para venta
+                                      </MenuItem>
+                                      <MenuItem value={'inChargeQuantity'}>
+                                          Encargados
+                                      </MenuItem>
+                                      <MenuItem value={'brokenQuantity'}>
+                                          Rotos
+                                      </MenuItem>
                                   </Select>
                               </FormControl>
                           </form>
@@ -326,33 +299,3 @@ const BucketCard = ({ bucket, bucketsList, match, getEntities, alert, setAlert }
 }
 
 export default BucketCard;
-/*
-<CardContent className=''>
-<Typography component='h5' variant='h4' className='subtitle-card'>
-   Productos
- </Typography>
- <Typography component='section' className='quantity-prod' >
-    <section>
-    Disp. para Venta
-   </section>
-   <section>
-     { bucket.availableToSellQuantity || 0 } u
-   </section>
- </Typography>
- <Typography component='section' className='quantity-prod' >
-   <section>
-      Encargados
-   </section>
-   <section>
-     { bucket.inChargeQuantity || 0 } u
-   </section>
- </Typography>
- <Typography component='section' className='quantity-prod' >
-   <section>
-     Rotos
-   </section>
-   <section>
-     { bucket.brokenQuantity || 0 } u
-   </section>
- </Typography>   
-</CardContent> */

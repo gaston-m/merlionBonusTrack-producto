@@ -28,7 +28,8 @@ a {
     height: calc(100% - 40px);
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
+    min-height: 85vh;
+    padding: 0rem;
     .card {
       padding: 1rem;
     }
@@ -427,5 +428,13 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
   z-index: 99999999 !important;
   margin: -2rem 40% 0 32% !important;
   width: 30%;
-  background-color: rgb(12, 65, 16) !important;
+}
+
+.subtitle-card-ligth {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.card-margin {
+  margin-top: 0 !important;
 }

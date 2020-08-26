@@ -82,7 +82,7 @@ Navbar styles
 }
 
 .brand-logo {
-  margin-left: 7rem;
+  margin-left: 2%;
   &:hover {
     text-decoration: none;
   }
@@ -103,6 +103,22 @@ Navbar styles
   &:hover {
     color: $header-color-hover;
     text-decoration: none;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .brand-title {
+    font-size: 100%;
+    display: inline;
+    margin: auto;
+  }
+  .brand-logo {
+    margin: auto;
+  }
+
+  .brand-logo img {
+    display: none;
+    margin: 0.5rem;
   }
 }
 

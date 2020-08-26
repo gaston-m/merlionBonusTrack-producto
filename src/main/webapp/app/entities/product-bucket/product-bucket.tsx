@@ -43,14 +43,21 @@ export const ProductBucket = (props: IProductBucketProps) => {
                       :
                         null
         }
-        <Typography className='subtitle' component='h3' variant='h3' >Buckets</Typography>
+        <Typography className='subtitle' component='h3' variant='h3' >
+          Product Buckets
+          <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+          <FontAwesomeIcon icon="plus" />
+          &nbsp;
+          Nuevo Product Buckets
+        </Link>
+          </Typography>
+
         <Grid className='grid-container' container spacing={2} alignContent='stretch'>
         {
           productBucketList.map(bucket => 
             <BucketCard 
               getEntities={props.getEntities} 
               match={match.url} 
-              bucketsList={...productBucketList} 
               key={bucket.id} 
               bucket={bucket} 
               alert={alert}
